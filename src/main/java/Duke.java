@@ -2,7 +2,7 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class Duke {
-    private ArrayList<String> arr = new ArrayList<>();
+    private ArrayList<Task> arr = new ArrayList<>();
     public Duke () {
         hello();
     }
@@ -16,16 +16,22 @@ public class Duke {
     public void SayBye() {
         System.out.println("Bye. Hope to see you again soon!");
     }
-    public void EchoAndAdd(String line, ArrayList<String> arr) {
-        System.out.println("added: " + line);
+    public void EchoAndAdd(Task line) {
         arr.add(line);
+        System.out.println("added: " + line.getLine());
     }
-    public void ListEverything(ArrayList<String> arr) {
-        int counter = 0;
-        for (String i : arr) {
-            counter += 1;
-            System.out.println(counter + ". " + i);
+    public void ListEverything() {
+        for (int i = 0; i < arr.size(); i++) {
+            String status = arr.get(i).getStatusIcon();
+            String line = arr.get(i).getLine();
+            System.out.println((i + 1) + ".[ " + status + " ] " + line);
         }
+    }
+    public void CompleteTask(int num) {
+        arr.get(num).setStatus();
+        String status = arr.get(num).getStatusIcon();
+        String line = arr.get(num).getLine();
+        System.out.println("Nice! I've marked this task as done: \n" + "[ " + status + " ] " + line);
     }
     public static void main(String[] args) {
         Duke duke = new Duke();
@@ -37,10 +43,20 @@ public class Duke {
                 break;
             }
             else if (line.equals("list")) {
-                duke.ListEverything(duke.arr);
+                duke.ListEverything();
+            }
+            else if (line.split(" ")[0].equals("done")) {
+                int num = Integer.parseInt(line.split(" ")[1]) - 1;
+                if (num < 0 || num >= duke.arr.size()) {
+                    System.out.println("Invalid number!");
+                }
+                else {
+                    duke.CompleteTask(num);
+                }
             }
             else {
-                duke.EchoAndAdd(line, duke.arr);
+                Task task = new Task(line);
+                duke.EchoAndAdd(task);
             }
         }
     }
