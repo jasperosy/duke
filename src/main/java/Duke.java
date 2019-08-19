@@ -1,6 +1,8 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Duke {
+    private ArrayList<String> arr = new ArrayList<>();
     public Duke () {
         hello();
     }
@@ -14,6 +16,17 @@ public class Duke {
     public void SayBye() {
         System.out.println("Bye. Hope to see you again soon!");
     }
+    public void EchoAndAdd(String line, ArrayList<String> arr) {
+        System.out.println("added: " + line);
+        arr.add(line);
+    }
+    public void ListEverything(ArrayList<String> arr) {
+        int counter = 0;
+        for (String i : arr) {
+            counter += 1;
+            System.out.println(counter + ". " + i);
+        }
+    }
     public static void main(String[] args) {
         Duke duke = new Duke();
         Scanner scan = new Scanner(System.in);
@@ -23,7 +36,12 @@ public class Duke {
                 duke.SayBye();
                 break;
             }
-            duke.GreetEchoExit(line);
+            else if (line.equals("list")) {
+                duke.ListEverything(duke.arr);
+            }
+            else {
+                duke.EchoAndAdd(line, duke.arr);
+            }
         }
     }
 }
