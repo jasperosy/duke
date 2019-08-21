@@ -12,7 +12,7 @@ public class Task {
         return status;
     }
     public String getStatusIcon() {
-        return (status ? "✓" : "✗"); //return tick or X symbols
+        return (status ? "\u2713" : "\u2718"); //return tick or X symbols
     }
     public String getLine() {
         return this.line;
