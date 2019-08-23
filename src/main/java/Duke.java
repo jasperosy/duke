@@ -33,22 +33,36 @@ public class Duke {
             System.out.println("Now you have " + arr.size() + " task in the list.");
         }
     }
-    public void addToDo(String line) {
+    public void addToDo(String line) throws DukeException {
         line = line.trim();
+        if (line.length() == 0) {
+            throw new DukeException("\u2639 OOPS!!! The description of a todo cannot be empty.");
+        }
         Task task = new Todo(line);
         arr.add(task);
         listTask(task);
     }
-    public void addDeadline(String line) {
-        String start = line.split("/by")[0].trim();
-        String end = line.split("/by")[1].trim();
+    public void addDeadline(String line) throws DukeException {
+        String linesplit[] = line.split("/by");
+        if (linesplit.length == 1) {
+            throw new DukeException("\u2639 OOPS!!! The description of a deadline needs a due date.");
+        }
+        String start = linesplit[0].trim();
+        String end = linesplit[1].trim();
         Task task = new Deadline(start, end);
         arr.add(task);
         listTask(task);
     }
-    public void addEvent(String line) {
-        String start = line.split("/at")[0].trim();
-        String end = line.split("/at")[1].trim();
+    public void addEvent(String line) throws DukeException {
+        String linesplit[] = line.split("/by");
+        if (linesplit.length == 1) {
+            throw new DukeException("\u2639 OOPS!!! The description of an event needs a date.");
+        }
+        String start = linesplit[0].trim();
+        String end = linesplit[1].trim();
+        if (end.length() == 0) {
+            throw new DukeException("\u2639 OOPS!!! The description of a todo cannot be empty.");
+        }
         Task task = new Event(start, end);
         arr.add(task);
         listTask(task);
@@ -63,34 +77,38 @@ public class Duke {
         Duke duke = new Duke();
         Scanner scan = new Scanner(System.in);
         while (true) {
-            String line = scan.nextLine();
-            if (line.equals("bye")) {
-                duke.SayBye();
-                break;
-            }
-            else if (line.equals("list")) {
-                duke.ListEverything();
-            }
-            else if (line.startsWith("done")) {
-                int num = Integer.parseInt(line.split(" ")[1]) - 1;
-                if (num < 0 || num >= duke.arr.size()) {
-                    System.out.println("Invalid number!");
+            try {
+                String line = scan.nextLine();
+                if (line.equals("bye")) {
+                    duke.SayBye();
+                    break;
+                } else if (line.equals("list")) {
+                    duke.ListEverything();
+                } else if (line.startsWith("done")) {
+                    int num = Integer.parseInt(line.split(" ")[1]) - 1;
+                    if (num < 0 || num >= duke.arr.size()) {
+                        System.out.println("Invalid number!");
+                    } else {
+                        duke.CompleteTask(num);
+                    }
+                } else if (line.startsWith("todo")) {
+                    line = line.replaceFirst("todo", "");
+                    duke.addToDo(line);
+                } else if (line.startsWith("deadline")) {
+                    line = line.replaceFirst("deadline", "");
+                    duke.addDeadline(line);
+                } else if (line.startsWith("event")) {
+                    line = line.replaceFirst("event", "");
+                    duke.addEvent(line);
                 }
                 else {
-                    duke.CompleteTask(num);
+                    throw new DukeException("\u2639 OOPS!!! I'm sorry, but I don't know what that means :-(");
                 }
             }
-            else if (line.startsWith("todo")) {
-                line = line.replaceFirst("todo", "");
-                duke.addToDo(line);
-            }
-            else if (line.startsWith("deadline")) {
-                line = line.replaceFirst("deadline", "");
-                duke.addDeadline(line);
-            }
-            else if (line.startsWith("event")) {
-                line = line.replaceFirst("event", "");
-                duke.addEvent(line);
+            catch (DukeException exception) {
+                String message = exception.getMessage();
+                System.out.println("\t " + message);
+                System.out.println("Please enter another task!");
             }
         }
     }
