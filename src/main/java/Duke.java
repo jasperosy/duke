@@ -54,7 +54,7 @@ public class Duke {
         listTask(task);
     }
     public void addEvent(String line) throws DukeException {
-        String linesplit[] = line.split("/by");
+        String linesplit[] = line.split("/at");
         if (linesplit.length == 1) {
             throw new DukeException("\u2639 OOPS!!! The description of an event needs a date.");
         }
