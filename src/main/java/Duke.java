@@ -1,5 +1,7 @@
+import java.nio.Buffer;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.io.*;
 
 public class Duke {
     private ArrayList<Task> arr = new ArrayList<>();
@@ -21,11 +23,13 @@ public class Duke {
     }
     public void CompleteTask(int num) {
         arr.get(num).setStatus();
+        writeToFile("output.txt");
         System.out.println("Nice! I've marked this task as done: \n" + arr.get(num));
     }
     public void listTask(Task line) {
         System.out.println("Got it. I've added this task:");
         System.out.println(line);
+        writeToFile("output.txt");
         if (arr.size() > 1) {
             System.out.println("Now you have " + arr.size() + " tasks in your list.");
         }
@@ -67,6 +71,75 @@ public class Duke {
         arr.add(task);
         listTask(task);
     }
+    public void writeToFile(String filename) {
+        try {
+            BufferedWriter out = new BufferedWriter(new FileWriter(filename));
+            for (int i = 0; i < arr.size(); i++) {
+                out.write(arr.get(i) + "\n");
+            }
+            out.close();
+        }
+        catch (IOException e) {
+            System.out.println(e + ", thus please try inputting other things.");
+        }
+    }
+    public void readFromFile(String filename) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(filename));
+            String line;
+            int counter = 0;
+            while ((line = reader.readLine()) != null) {
+                counter += 1;
+                if (line.startsWith("[T]")) {
+                    boolean checker = checkDone(line);
+                    line = line.substring(7).trim();
+                    Task task = new Todo(line);
+                    arr.add(task);
+                    if (checker) {
+                        arr.get(counter - 1).setStatus();
+                    }
+                }
+                else if (line.startsWith("[D]")) {
+                    boolean checker = checkDone(line);
+                    line = line.substring(7).trim();
+                    String linesplit[] = line.split("\\(by:");
+                    String start = linesplit[0].trim();
+                    String end = linesplit[1].trim();
+                    end = end.substring(0, end.length() - 1);
+                    Task task = new Deadline(start, end);
+                    arr.add(task);
+                    if (checker) {
+                        arr.get(counter - 1).setStatus();
+                    }
+                }
+                else if (line.startsWith("[E]")) {
+                    boolean checker = checkDone(line);
+                    line = line.substring(7).trim();
+                    String linesplit[] = line.split("\\(at:");
+                    String start = linesplit[0].trim();
+                    String end = linesplit[1].trim();
+                    end = end.substring(0, end.length() - 1);
+                    Task task = new Event(start, end);
+                    arr.add(task);
+                    if (checker) {
+                        arr.get(counter - 1).setStatus();
+                    }
+                }
+            }
+            reader.close();
+        }
+        catch (Exception e) {
+            System.out.println(e);
+            e.printStackTrace(System.out);
+            System.out.println("Look at the output.txt for any irregularities!");
+        }
+    }
+    public boolean checkDone(String line) {
+        if (line.charAt(4) == '\u2713') {
+            return true;
+        }
+        return false;
+    }
     public static void main(String[] args) {
         String logo = " ____        _        \n"
                 + "|  _ \\ _   _| | _____ \n"
@@ -76,6 +149,10 @@ public class Duke {
         System.out.println("Hello from\n" + logo);
         Duke duke = new Duke();
         Scanner scan = new Scanner(System.in);
+        File file = new File("output.txt");
+        if (file.exists()) {
+            duke.readFromFile("output.txt");
+        }
         while (true) {
             try {
                 String line = scan.nextLine();

@@ -1,1 +1,4 @@
 [T][✘] borrow book
+[D][✓] dothis (by: Sunday)
+[E][✘] project meeting(at: mon 2-4pm)
+[E][✘] dothat(at: asodi)
