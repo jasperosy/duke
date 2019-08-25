@@ -1,8 +1,5 @@
-[T][✘] borrow book
+﻿[T][✘] borrow book
 [D][✓] dothis (by: Sunday)
 [E][✘] project meeting(at: mon 2-4pm)
-[E][✘] dothat(at: asodi)
 [D][✘] do (by: 11-09-1997 18:00)
-[E][✘] project meeting(at: 1998-11-11T11:11:00)
-[D][✘] dosomething (by: 2019-11-11T11:11:00)
 [D][✘] asd (by: 2020-12-12T12:12:00)
