@@ -1,7 +1,14 @@
 import java.nio.Buffer;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.time.DateTimeException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.*;
+import java.text.SimpleDateFormat;
 
 public class Duke {
     private ArrayList<Task> arr = new ArrayList<>();
@@ -53,9 +60,23 @@ public class Duke {
         }
         String start = linesplit[0].trim();
         String end = linesplit[1].trim();
-        Task task = new Deadline(start, end);
-        arr.add(task);
-        listTask(task);
+        if (end.length() == 0) {
+            throw new DukeException("\u2639 OOPS!!! The datetime of a deadline cannot be empty.");
+        }
+        else if (isTimeStampValid(end)) {
+            String pattern = "dd-MM-yyyy HH:mm";
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+            LocalDateTime localDateTime = LocalDateTime.from(formatter.parse(end));
+            Timestamp timestamp = Timestamp.valueOf(localDateTime);
+            DateTimeFormatter formatter2 = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+            end = formatter2.format(timestamp.toLocalDateTime());
+            Task task = new Deadline(start, end);
+            arr.add(task);
+            listTask(task);
+        }
+        else {
+            System.out.println("Time format is wrong! Try again.");
+        }
     }
     public void addEvent(String line) throws DukeException {
         String linesplit[] = line.split("/at");
@@ -65,11 +86,22 @@ public class Duke {
         String start = linesplit[0].trim();
         String end = linesplit[1].trim();
         if (end.length() == 0) {
-            throw new DukeException("\u2639 OOPS!!! The description of a todo cannot be empty.");
+            throw new DukeException("\u2639 OOPS!!! The datetime of an event cannot be empty.");
         }
-        Task task = new Event(start, end);
-        arr.add(task);
-        listTask(task);
+        else if (isTimeStampValid(end)) {
+            String pattern = "dd-MM-yyyy HH:mm";
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+            LocalDateTime localDateTime = LocalDateTime.from(formatter.parse(end));
+            Timestamp timestamp = Timestamp.valueOf(localDateTime);
+            DateTimeFormatter formatter2 = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+            end = formatter2.format(timestamp.toLocalDateTime());
+            Task task = new Event(start, end);
+            arr.add(task);
+            listTask(task);
+        }
+        else {
+            System.out.println("Time format is wrong! Try again.");
+        }
     }
     public void writeToFile(String filename) {
         try {
@@ -140,6 +172,25 @@ public class Duke {
         }
         return false;
     }
+    public boolean isTimeStampValid(String inputString)
+    {
+        SimpleDateFormat format = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm");
+        try{
+            String str = "";
+            format.parse(inputString);
+            String pattern = "dd-MM-yyyy HH:mm";
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+            LocalDateTime localDateTime = LocalDateTime.from(formatter.parse(inputString));
+            Timestamp timestamp = Timestamp.valueOf(localDateTime);
+            DateTimeFormatter formatter2 = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+            str = formatter2.format(timestamp.toLocalDateTime());
+            return true;
+        }
+        catch(ParseException | DateTimeException e)
+        {
+            return false;
+        }
+    }
     public static void main(String[] args) {
         String logo = " ____        _        \n"
                 + "|  _ \\ _   _| | _____ \n"
@@ -147,6 +198,7 @@ public class Duke {
                 + "| |_| | |_| |   <  __/\n"
                 + "|____/ \\__,_|_|\\_\\___|\n";
         System.out.println("Hello from\n" + logo);
+        System.out.println("Please only specify date and time for deadlines and events in the format DD-MM-YYYY HH:MM");
         Duke duke = new Duke();
         Scanner scan = new Scanner(System.in);
         File file = new File("output.txt");
