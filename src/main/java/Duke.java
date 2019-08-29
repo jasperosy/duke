@@ -200,6 +200,7 @@ public class Duke {
         System.out.println("Noted. I've removed this task:");
         System.out.println(arr.get(num));
         arr.remove(num);
+        writeToFile("output.txt");
         System.out.println("Now you have " + arr.size() + " tasks in the list.");
     }
     public static void main(String[] args) {
