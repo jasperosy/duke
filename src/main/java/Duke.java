@@ -202,6 +202,28 @@ public class Duke {
         arr.remove(num);
         System.out.println("Now you have " + arr.size() + " tasks in the list.");
     }
+    public void findTask(String line) throws DukeException {
+        String linesplit[] = line.split(" ");
+        if (linesplit.length == 1) {
+            throw new DukeException("\u2639 OOPS!!! The description of a find cannot be empty.");
+        }
+        String item = linesplit[1].trim();
+        ArrayList<Task> foundarr = new ArrayList<>();
+        for (Task i : arr) {
+            if (i.getLine().contains(item)) {
+                foundarr.add(i);
+            }
+        }
+        if (foundarr.size() == 0) {
+            System.out.println("There are no matching tasks in your list!");
+        }
+        else {
+            System.out.println("Here are the matching tasks in your list:");
+            for (int i = 0; i < foundarr.size(); i++) {
+                System.out.println((i + 1) + ". " + foundarr.get(i));
+            }
+        }
+    }
     public static void main(String[] args) {
         String logo = " ____        _        \n"
                 + "|  _ \\ _   _| | _____ \n"
@@ -248,6 +270,9 @@ public class Duke {
                     } else {
                         duke.deleteTask(num);
                     }
+                }
+                else if (line.startsWith("find")) {
+                    duke.findTask(line);
                 }
                 else {
                     throw new DukeException("\u2639 OOPS!!! I'm sorry, but I don't know what that means :-(");
