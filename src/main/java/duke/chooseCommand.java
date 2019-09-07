@@ -11,8 +11,18 @@ import duke.command.ListCommand;
 import duke.command.Command;
 import duke.exception.DukeException;
 
+/**
+ * Represents a parser to process the comands inputted by the user.
+ */
 public class chooseCommand {
-
+    /**
+     * Main method of the <code>chooseCommand</code> class.
+     * Parses the input given by user and calls specific <code>Commands</code>
+     * after checking the validity of the input.
+     * @param line Command inputted by user.
+     * @return <code>Command</code> based on the user input.
+     * @throws DukeException Catches invalid commands given by user.
+     */
     static Command choose (String line) throws DukeException {
         if (line.equals("bye")) {
             return new exitCommand();

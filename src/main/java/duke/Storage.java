@@ -13,8 +13,16 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.FileReader;
 
+/**
+ * Represents a <code>Storage</code> class to store and read
+ * <code>Task</code> objects to/from harddisk.
+ */
 public class Storage {
-
+    /**
+     * Writes <code>Task</code> objects to harddisk.
+     * @param tasklist <code>TaskList</code> that contains <code>Task</code> objects.
+     * @throws DukeException Exception if the file cannot be written to.
+     */
     public void writeToFile(TaskList tasklist) throws DukeException {
         try {
             ArrayList<Task> arr = tasklist.getTasks();
@@ -30,6 +38,12 @@ public class Storage {
         }
     }
     protected ArrayList<Task> arr = new ArrayList<Task>();
+
+    /**
+     * Reads <code>Task</code> objects that were previously saved to harddisk.
+     * @return <code>TaskList</code> containing <code>Task</code> objects.
+     * @throws DukeException Exception if the file does not exist or cannot be read.
+     */
     public ArrayList<Task> readFromFile() throws DukeException {
         try {
             String filename = "output.txt";
@@ -84,6 +98,12 @@ public class Storage {
         }
         return arr;
     }
+
+    /**
+     * Checks if the <code>Task</code> has already been marked as done.
+     * @param line <code>Task</code> object in string format.
+     * @return true if the <code>Task</code> object has already been marked as done, false otherwise.
+     */
     public boolean checkDone(String line) {
         if (line.charAt(4) == '\u2713') {
             return true;
