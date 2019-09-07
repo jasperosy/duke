@@ -1,3 +1,8 @@
+package duke;
+
+import duke.exception.DukeException;
+import duke.task.Task;
+
 import java.util.Scanner;
 
 public class Ui {
@@ -18,7 +23,7 @@ public class Ui {
     }
     public void hello() {
         showLine();
-        System.out.println("\tHello! I'm Duke");
+        System.out.println("\tHello! I'm duke.Duke");
         System.out.println("\tWhat can I do for you?");
         showLine();
     }

@@ -1,10 +1,16 @@
-import java.util.ArrayList;
+package duke.command;
 
-public class deleteCommand extends Command {
+import duke.TaskList;
+import duke.Ui;
+import duke.Storage;
+import duke.exception.DukeException;
+import duke.task.Task;
+
+public class completeCommand extends Command {
 
     int index;
 
-    public deleteCommand(int index) {
+    public completeCommand(int index) {
         super();
         this.index = index;
     }
@@ -14,9 +20,8 @@ public class deleteCommand extends Command {
         }
         else {
             Task task = arr.getTask(index);
-            arr.deleteTask(index);
-            ui.deleteMessage(task, arr.getSize());
-            storage.writeToFile(arr);
+            task.setStatus();
+            ui.completeMessage(task);
         }
     }
     public boolean isExit() {

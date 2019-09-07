@@ -1,3 +1,12 @@
+package duke.command;
+
+import duke.TaskList;
+import duke.Ui;
+import duke.Storage;
+import duke.exception.DukeException;
+import duke.task.Deadline;
+import duke.task.Task;
+
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -5,23 +14,23 @@ import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class addEventCommand extends Command {
+public class addDeadlineCommand extends Command {
 
     String line;
 
-    public addEventCommand(String line) {
+    public addDeadlineCommand(String line) {
         super();
         this.line = line;
     }
     public void execute(TaskList arr, Ui ui, Storage storage) throws DukeException {
-        String linesplit[] = line.split("/at");
+        String linesplit[] = line.split("/by");
         if (linesplit.length == 1) {
-            throw new DukeException("\u2639 OOPS!!! The description of an event needs a date.");
+            throw new DukeException("\u2639 OOPS!!! The description of a deadline needs a due date.");
         }
         String start = linesplit[0].trim();
         String end = linesplit[1].trim();
         if (end.length() == 0) {
-            throw new DukeException("\u2639 OOPS!!! The datetime of an event cannot be empty.");
+            throw new DukeException("\u2639 OOPS!!! The datetime of a deadline cannot be empty.");
         }
         else if (isTimeStampValid(end)) {
             String pattern = "dd-MM-yyyy HH:mm";
@@ -30,7 +39,7 @@ public class addEventCommand extends Command {
             Timestamp timestamp = Timestamp.valueOf(localDateTime);
             DateTimeFormatter formatter2 = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
             end = formatter2.format(timestamp.toLocalDateTime());
-            Task task = new Event(start, end);
+            Task task = new Deadline(start, end);
             arr.addTask(task);
             ui.addTaskMessage(task, arr.getSize());
             storage.writeToFile(arr);

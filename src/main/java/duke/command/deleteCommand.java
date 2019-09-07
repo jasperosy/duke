@@ -1,8 +1,16 @@
-public class completeCommand extends Command {
+package duke.command;
+
+import duke.TaskList;
+import duke.Ui;
+import duke.Storage;
+import duke.exception.DukeException;
+import duke.task.Task;
+
+public class deleteCommand extends Command {
 
     int index;
 
-    public completeCommand(int index) {
+    public deleteCommand(int index) {
         super();
         this.index = index;
     }
@@ -12,8 +20,9 @@ public class completeCommand extends Command {
         }
         else {
             Task task = arr.getTask(index);
-            task.setStatus();
-            ui.completeMessage(task);
+            arr.deleteTask(index);
+            ui.deleteMessage(task, arr.getSize());
+            storage.writeToFile(arr);
         }
     }
     public boolean isExit() {

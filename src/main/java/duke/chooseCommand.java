@@ -1,3 +1,16 @@
+package duke;
+
+import duke.command.addDeadlineCommand;
+import duke.command.addEventCommand;
+import duke.command.AddToDoCommand;
+import duke.command.completeCommand;
+import duke.command.deleteCommand;
+import duke.command.exitCommand;
+import duke.command.findCommand;
+import duke.command.ListCommand;
+import duke.command.Command;
+import duke.exception.DukeException;
+
 public class chooseCommand {
 
     static Command choose (String line) throws DukeException {
