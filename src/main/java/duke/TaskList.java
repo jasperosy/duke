@@ -43,7 +43,7 @@ public class TaskList {
     }
 
     /**
-     * Retrvies the <code>Task</code> object at a particular index.
+     * Retrieves the <code>Task</code> object at a particular index.
      * @param index Index of <code>Task</code> object, specified by the user.
      * @return <code>Task</code> object at a particular index.
      */
